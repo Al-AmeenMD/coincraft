@@ -1,22 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import {  CryptoState } from "../CryptoContext";
-import axios from 'axios';
-import { HistoricalChart } from '../config/api';
-import { CircularProgress, ThemeProvider, createTheme, makeStyles } from '@material-ui/core';
-import { Line } from 'react-chartjs-2';
-import { chartDays } from '../config/data';
-import SelectButton from './SelectButton';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { HistoricalChart } from "../config/api";
+import Chart from 'chart.js/auto';
+import { Line } from "react-chartjs-2";
+import {
+  CircularProgress,
+  createTheme,
+  makeStyles,
+  ThemeProvider,
+} from "@material-ui/core";
+import SelectButton from "./SelectButton";
+import { chartDays } from "../config/data";
+import { CryptoState } from "../CryptoContext";
 
 const CoinInfo = ({ coin }) => {
-  const[historicalData, setHistoricalData] = useState();
-  const[days, setDays] = useState(1);
-
+  const [historicData, setHistoricData] = useState();
+  const [days, setDays] = useState(1);
   const { currency } = CryptoState();
-  const [flag, setFlag] = useState(false);
+  const [flag,setflag] = useState(false);
 
   const useStyles = makeStyles((theme) => ({
     container: {
-      width: "70%",
+      width: "75%",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -29,21 +34,23 @@ const CoinInfo = ({ coin }) => {
         padding: 20,
         paddingTop: 0,
       },
-    }
-  }))
+    },
+  }));
 
   const classes = useStyles();
 
-  const fetchHistoricalData = async() => {
+  const fetchHistoricData = async () => {
     const { data } = await axios.get(HistoricalChart(coin.id, days, currency));
-    // setFlag(true);
-    setHistoricalData(data.prices);
-  }
+    setflag(true);
+    setHistoricData(data.prices);
+  };
+
+  console.log(coin);
 
   useEffect(() => {
-    fetchHistoricalData();
-    // eslint-disable-next-line
-  }, [currency, days]);
+    fetchHistoricData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [days]);
 
   const darkTheme = createTheme({
     palette: {
@@ -54,12 +61,10 @@ const CoinInfo = ({ coin }) => {
     },
   });
 
-  
-
- return (
+  return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
-        {!historicalData || flag===false ? (
+        {!historicData | flag===false ? (
           <CircularProgress
             style={{ color: "gold" }}
             size={250}
@@ -69,7 +74,7 @@ const CoinInfo = ({ coin }) => {
           <>
             <Line
               data={{
-                labels: historicalData.map((coin) => {
+                labels: historicData.map((coin) => {
                   let date = new Date(coin[0]);
                   let time =
                     date.getHours() > 12
@@ -80,9 +85,9 @@ const CoinInfo = ({ coin }) => {
 
                 datasets: [
                   {
-                    data: historicalData.map((coin) => coin[1]),
+                    data: historicData.map((coin) => coin[1]),
                     label: `Price ( Past ${days} Days ) in ${currency}`,
-                    borderColor: "#EEBC1D ",
+                    borderColor: "#EEBC1D",
                   },
                 ],
               }}
@@ -106,7 +111,7 @@ const CoinInfo = ({ coin }) => {
                 <SelectButton
                   key={day.value}
                   onClick={() => {setDays(day.value);
-                    // setFlag(false);
+                    setflag(false);
                   }}
                   selected={day.value === days}
                 >
