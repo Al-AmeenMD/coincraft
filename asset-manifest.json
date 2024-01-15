@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/coincraft/static/css/main.7d22971d.css",
+    "main.js": "/coincraft/static/js/main.b4cef053.js",
+    "index.html": "/coincraft/index.html",
+    "main.7d22971d.css.map": "/coincraft/static/css/main.7d22971d.css.map",
+    "main.b4cef053.js.map": "/coincraft/static/js/main.b4cef053.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7d22971d.css",
+    "static/js/main.b4cef053.js"
+  ]
+}
